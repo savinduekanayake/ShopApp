@@ -80,3 +80,15 @@ button:active{
     background-color: purple;
     color: white;
 }
+.card_image{
+    width: 200px;
+    height: 400px;
+}
+.image{
+    width: 100px;
+    height: 200px;
+}
+/* .card{
+    width: 100px;
+    height: 400px;
+} */
