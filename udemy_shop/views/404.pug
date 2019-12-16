@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-html(lang="en")
-    head
-        meta(charset="UTF-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        meta(http-equiv="X-UA-Compatible", content="ie=edge")
-        title page not found
-        link(rel="stylesheet", href="css/main.css")
-    body
-        header.main-header
-            nav.main-header_nav
-                ul.main-header_item-list
-                    li.main-header_item
-                        a.active(href="/") Shop
-                    li.main-header_item
-                        a(href="/admin/add-product") Add Product
-     
-        h1 Page Not Found!
+extends layouts/main-layout.pug
+
+block content
+    h1 Page not found!
