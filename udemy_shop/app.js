@@ -9,12 +9,13 @@ const expressHbs = require('express-handlebars');
 const app = express();
 
 //for handle bar you need to implement app.engine
-app.engine('hbs',
-expressHbs({layoutsDir: 'views/layouts',defaultLayout:'main-layout', extname:'hbs'}))
+//app.engine('hbs',expressHbs({layoutsDir: 'views/layouts',defaultLayout:'main-layout', extname:'hbs'}))
 
 // dynamic template
-app.set('view engine','hbs');
+//app.set('view engine','hbs');
 //app.set('view engine','pug');
+//
+app.set('view engine', 'ejs')
 app.set('views','views');
 
 const adminData = require('./routes/admin');
