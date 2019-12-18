@@ -4,7 +4,7 @@ const path = require('path');
 const parser = require('parse')
 
 //import handleBar template
-const expressHbs = require('express-handlebars');
+//const expressHbs = require('express-handlebars');
 
 const app = express();
 

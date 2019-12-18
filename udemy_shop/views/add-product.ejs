@@ -1,26 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title> <%= pageTitle %></title>
+<%- include('includes/head.ejs') %>
 
     <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/form.css">
 
     
 </head>
 
 <body>
-    <header class="main-header">
-        <nav class="main-header_nav">
-            <ul class="main-header_item-list">
-                <li class="main-header_item"><a href="/">Shop</a></li>
-                <li class="main-header_item"><a class="active" href="/add-product">Add Product</a></li>
-            </ul>
-        </nav>
-    </header>
+    <%- include('includes/navigation.ejs') %>
 
 
     <main>
@@ -34,6 +21,5 @@
 
         </form>
     </main>
-</body>
 
-</html>
+<%- include('includes/end.ejs') %>
