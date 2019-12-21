@@ -23,10 +23,12 @@ const getProductFromFile=(callBack)=>{
 }
 
 module.exports = class Product {
-    constructor(t) {
-        this.title = t;
-        // console.log('hi1')
-        // console.log(t)
+    constructor(title,imageUrl,description,price) {
+        this.title = title;
+        this.imageUrl=imageUrl;
+        this.description=description;
+        this.price=price;
+        
     }
 
     save() {
@@ -43,6 +45,6 @@ module.exports = class Product {
     static fetchAll(callBack) {
      //   console.log('hi')
      getProductFromFile(callBack);
-        //methana mehema une kohomada????????
+        
     }
 }
