@@ -20,10 +20,14 @@
                         </div>
                         <div class="card_content">
                             <h2 class="product_price">$<%= product.price %></h2>
-                            <p class="product_description"><%= product.product_description %></p>
+                            <p class="product_description"><%= product.description %></p>
                         </div>
                         <div class="card_action">
-                            <button class="btn">Add to Cart</button>
+                             <!-- /product/.0.343  -->
+                            <a href="/products/<%= product.id %>" class="btn">Details</a>
+                            
+                            <%- include('../includes/add-to-cart.ejs',{product:product}) %>
+                            
                             
                     </article>
                 <% } %>

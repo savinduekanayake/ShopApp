@@ -20,11 +20,11 @@
                         </div>
                         <div class="card_content">
                             <h2 class="product_price">$<%= product.price %></h2>
-                            <p class="product_description"><%= product.product_description %></p>
+                            <p class="product_description"><%= product.description %></p>
                         </div>
                         <div class="card_action">
-                            <button class="btn">Add to Cart</button>
-                            
+                            <%- include('../includes/add-to-cart.ejs',{product:product}) %>
+                        </div>                         
                     </article>
                 <% } %>
             </div>

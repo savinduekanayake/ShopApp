@@ -49,7 +49,34 @@ main {
     width: 20rem;
     max-width: 90%;
     margin: auto;
+    display: block;
 }
+/*===================================*/
+
+.product-item {
+    width: 20rem;
+    max-width: 95%;
+    margin: 1rem;
+    margin-bottom: 30px;
+
+}
+
+.product__title {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.product__price {
+    text-align: center;
+    color: #4d4d4d;
+    margin-bottom: 0.5rem;
+}
+
+.product__description {
+    text-align: center;
+}
+
+/*=======================*/
 
 .form-control{
     margin: 1rem 0;
@@ -75,20 +102,43 @@ button{
     border-radius: 3px;
     cursor: pointer;
 }
-button:hover,
+/* button:hover,
 button:active{
     background-color: purple;
     color: white;
+} */
+.card{
+    width: 250px;
+    /* height: 500px; */
 }
-.card_image{
-    width: 200px;
-    height: 400px;
-}
-.image{
-    width: 100px;
+ .card_image{
+    width: 250px;
     height: 200px;
 }
-/* .card{
+.card_image img{
+    width: 250px;
+    height: 200px;
+   
+}
+
+.card_action,
+.card_content,
+.product_title{
+    text-align: center;
+}
+
+/*
+.image{
+    width: 100px;
+    height: 200px; 
+}
+ .card{
     width: 100px;
     height: 400px;
 } */
+
+.centered img{
+    width: 250px;
+    height: 200px;
+   
+}
