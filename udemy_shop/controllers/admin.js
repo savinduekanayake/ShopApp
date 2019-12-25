@@ -1,13 +1,12 @@
 const Product = require('../models/product');
 
 exports.getAddProduct=(req,res,next)=>{
-    res.render('admin/add-product',
+    res.render('admin/edit-product',
     {layout:false,
     pageTitle:'Add Product',
      path:"/admin/add-product",
-     formsCSS:true,
-     productCSS:true, 
-    activeAddProduct:true})
+     editing:false
+    })
 };
 
 exports.postAddProduct = (req,res,next)=>{
@@ -22,6 +21,38 @@ exports.postAddProduct = (req,res,next)=>{
     product.save();
     res.redirect('/')
 }
+
+exports.getEditProduct=(req,res,next)=>{
+    console.log('came here');
+    // get quary para meters
+    const editMode = req.query.edit;
+    if(!editMode){
+        console.log('edit mode off')
+        return res.redirect('/');
+    }
+
+    const prodId = req.params.productId;
+    Product.findById(prodId,product=>{
+        console.log(prodId)
+        console.log(product)
+        //if there is no such product
+        if(!product){
+            console.log('sry')
+            return res.redirect('/');
+        }
+        // product is exsist
+        res.render('admin/edit-product',
+            {
+            pageTitle:'Edit Product',
+            path:"/admin/edit-product",
+            editing:editMode,
+            product:product
+            }
+        );
+    })
+    
+};
+
 
 exports.getProducts = (req,res,next) => {
     Product.fetchAll(products=>{

@@ -30,8 +30,8 @@ module.exports = class Cart {
                 cart.products= [...cart.products];
                 cart.products[existingProductIndex]= updatedProduct;
             }else{
-            updatedProduct = {id:id, qty:1};
-            cart.products = [ ...cart.products,updatedProduct];
+                updatedProduct = {id:id, qty:1};
+                cart.products = [ ...cart.products,updatedProduct];
             }
             //increase price and write to the file
             cart.totalPrice = +cart.totalPrice + +productPrice;

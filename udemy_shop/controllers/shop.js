@@ -52,15 +52,10 @@ exports.getCart = (req,res,next)=>{
 //============================================================================
 exports.postCart = (req,res,next)=>{
     const prodId = req.body.productId;
-    console.log('hi')
-    console.log(req.body.productId);
-    console.log(prodId)
-    console.log('bye')
-    Product.findById(prodId,product=>{
-        console.log(prodId)
-        console.log('hi 3')
-        console.log(product)
-        console.log('hi 4')
+    //console.log(prodId)
+    //console.log(prodId.split(' ').join(''))
+    Product.findById(prodId.split(' ').join(''),product=>{
+        //console.log(product)
         Cart.addProduct(prodId,product.price);
     });
     res.redirect('/cart');
