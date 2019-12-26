@@ -21,19 +21,19 @@
                 </div>
                 <div class="card_content">
                     <h2 class="product_price">$<%= product.price %></h2>
-                    <p class="product_description"><%= product.product_description %></p>
+                    <p class="product_description"><%= product.description %></p>
                 </div>
 
 
                 <div class="card_action">
 
-                    <a href="/admin/edit-product" class="btn">Edit</button>
+                    <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</button></a>
 
                         <form action="/admin/delete-product" method="POST">
                             <button class="btn" type="submit">Delete</button>
                         </form>
-
-
+                
+                </div>
             </article>
             <% } %>
         </div>
