@@ -20,7 +20,12 @@ router.post('/add-product',adminController.postAddProduct);
 
 router.get('/edit-product/:productId',adminController.getEditProduct);
 
+//  /admin/edit-product =>POST
 router.post('/edit-product',adminController.postEditProduct);
+
+//delete a product 
+router.post('/delete-product',adminController.postDeleteProduct)
+
 // exports.routes = router;
 // exports.products = products;
 

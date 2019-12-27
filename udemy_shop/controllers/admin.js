@@ -23,7 +23,7 @@ exports.postAddProduct = (req,res,next)=>{
 }
 
 exports.getEditProduct=(req,res,next)=>{
-    console.log('came here');
+   // console.log('came here');
     // get quary para meters
     const editMode = req.query.edit;
     if(!editMode){
@@ -33,8 +33,8 @@ exports.getEditProduct=(req,res,next)=>{
 
     const prodId = req.params.productId;
     Product.findById(prodId,product=>{
-        console.log(prodId)
-        console.log(product)
+     //   console.log(prodId)
+      //  console.log(product)
         //if there is no such product
         if(!product){
             console.log('sry')
@@ -64,6 +64,14 @@ exports.postEditProduct = (req,res,next)=>{
     updatedProduct.save();
     res.redirect('/admin/products')
 };
+
+exports.postDeleteProduct = (req,res,next)=>{
+    prodId= req.body.productId;
+    console.log('came to controller postDelete')
+    Product.deleteById(prodId);
+    res.redirect('/admin/products');
+
+}
 
 exports.getProducts = (req,res,next) => {
     Product.fetchAll(products=>{
