@@ -58,7 +58,7 @@ module.exports = class Cart {
 //===========================================================================================
 //methanin ehata run wenne na. error eak enneth na
             console.log(product)
-            productQty = product.qty;
+            productQty = cart.qty;
             console.log(productQty)
             console.log('came to delete cart product2')
             updateCart.products = updateCart.products.filter(
