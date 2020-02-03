@@ -4,7 +4,8 @@ const path = require('path');
 const parser = require('parse')
 
 const errorController = require('./controllers/error')
-const db = require('./util/database')
+// const db = require('./util/database')
+const sequelize = require('./util/database')
 
 const app = express();
 
@@ -35,5 +36,15 @@ app.use('/',errorController.get404);
 
 //layout:false need when handlebar use. otherwise occuring errors
 
+sequelize
+    .sync()
+    .then((result)=>{
+        //console.log(result);
+        console.log('Server is running...')
+        app.listen(3000);
+    })
+    .catch(err => {
+        console.log(err)
+    });
 
-app.listen(3000);
+// app.listen(3000);
