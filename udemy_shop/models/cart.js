@@ -48,26 +48,17 @@ module.exports = class Cart {
             if(err){
                 return;
             }
-            console.log(id)
-            console.log('came to delete cart product1')
+            
             const updateCart = { ...JSON.parse(fileContent) }
-            console.log('came to delete cart product1')
-            console.log(updateCart)
-            const product = updateCart.products.find(prod=>prod.id == id);
-            //const product = updateCart.products.find(prod=>prod.id===id);
-//===========================================================================================
-//methanin ehata run wenne na. error eak enneth na
-            console.log(product)
-            productQty = cart.qty;
-            console.log(productQty)
-            console.log('came to delete cart product2')
+            const product = updateCart.products.find(prod=>prod.id === id);
+            
             updateCart.products = updateCart.products.filter(
                 prod=> prod.id !== id
             );
-            updateCart.totalPrice = updateCart.totalPrice-productPrice*productQty;
-            console.log(updateCart)
+            
+            updateCart.totalPrice = updateCart.totalPrice-productPrice*product.qty;
             fs.writeFile(p,JSON.stringify(updateCart),(err)=>{
-                console.log(err);
+                // console.log(err);
                 if(!err){
                     console.log('succesfully update cart');
                 }
@@ -75,4 +66,17 @@ module.exports = class Cart {
             });
         });
     }
+
+    static getCart(cb){
+        fs.readFile(p,(err,fileContent)=>{
+            const cart = JSON.parse(fileContent);
+            if(err){
+                cb(null)
+            }else{
+                cb(cart);
+            }
+            
+        });
+    }
+
 };

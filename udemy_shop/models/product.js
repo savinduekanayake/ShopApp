@@ -71,15 +71,15 @@ module.exports = class Product {
             //     console.log(err);
             // });
             console.log(id)
-            console.log('came to model product deleteById')
+            // console.log('came to model product deleteById')
             const product = products.find(prod=>prod.id===id);
             const updateProducts = products.filter(prod=>prod.id !== id);
               fs.writeFile(p, JSON.stringify(updateProducts),(err)=>{
                 if(!err){
-                    console.log('didnt came error writing file product data')
+                    console.log('successfully deleted from product')
                     Cart.deleteById(id,product.price);
                 }
-                console.log(":p")
+                
             });
         });
     };
