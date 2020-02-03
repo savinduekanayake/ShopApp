@@ -67,7 +67,7 @@ exports.postEditProduct = (req,res,next)=>{
 
 exports.postDeleteProduct = (req,res,next)=>{
     prodId= req.body.productId;
-    console.log('came to controller postDelete')
+    //console.log('came to controller postDelete')
     Product.deleteById(prodId);
     res.redirect('/admin/products');
 

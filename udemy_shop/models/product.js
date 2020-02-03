@@ -70,7 +70,7 @@ module.exports = class Product {
             // fs.writeFile(p, JSON.stringify(products),(err)=>{
             //     console.log(err);
             // });
-            console.log(id)
+            //console.log(id)
             // console.log('came to model product deleteById')
             const product = products.find(prod=>prod.id===id);
             const updateProducts = products.filter(prod=>prod.id !== id);
