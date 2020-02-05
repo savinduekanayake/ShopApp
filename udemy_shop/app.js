@@ -11,6 +11,8 @@ const User = require('./models/user');
 const Product = require('./models/product');
 const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
+const Order = require('./models/order');
+const orderItem = require('./models/order-item');
 
 const app = express();
 
@@ -61,6 +63,10 @@ Cart.belongsTo(User);//optional
 
 Cart.belongsToMany(Product,{ through: CartItem });
 Product.belongsToMany(Cart,{ through: CartItem });
+
+Order.belongsTo(User);
+User.hasMany(Order)
+Order.belongsToMany(Product, {through:orderItem});
 
 
 
