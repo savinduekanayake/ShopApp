@@ -16,11 +16,21 @@ exports.postAddProduct = (req,res,next)=>{
     const description = req.body.description;
     const imageUrl = req.body.imageUrl;
 
+    
+/* another way to doing below senario
     Product.create({  //no need to save. it auto save into db
         title: title,
         price: price,
         imageUrl: imageUrl,
-        description: description
+        description: description,
+        userId: req.user.id
+    })
+ */   
+    req.user.createProduct({
+        title: title,
+        price: price,
+        imageUrl: imageUrl,
+        description: description 
     }).then(result=>{
         //console.log(result)
         console.log('Created product');
@@ -50,11 +60,15 @@ exports.getEditProduct=(req,res,next)=>{
     }
 
     const prodId = req.params.productId;
-    Product.findByPk(prodId)
-        .then(product=>{
+   // Product.findByPk(prodId)
+   //.then()
+   //.catch()
+    req.user.getProducts({where : {id:prodId}})
+        .then(products=>{
         //   console.log(prodId)
          //  console.log(product)
            //if there is no such product
+           const product= products[0];
            if(!product){
                console.log('sry')
                return res.redirect('/');
@@ -120,7 +134,7 @@ exports.postDeleteProduct = (req,res,next)=>{
 }
 
 exports.getProducts = (req,res,next) => {
-    Product.findAll()
+    req.user.getProducts()
     .then(products=>{
         res.render('admin/products', { 
             prods: products, 
