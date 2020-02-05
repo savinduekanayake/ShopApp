@@ -166,16 +166,11 @@ exports.postCartDelete = (req,res,next)=>{
 }
 
 
-exports.getCheckout=(req,res,next)=>{
-    res.render('/shop/checkout',{
-        path:'/checkout',
-        pageTitle:'Checkout'
-    });
-};
-
 exports.postOrder = (req,res,next)=>{
+    let fetchedCart;
     req.user.getCart()
         .then(cart=>{
+            fetchedCart=cart;
             return cart.getProducts();
         })
         .then(products=>{
@@ -183,12 +178,16 @@ exports.postOrder = (req,res,next)=>{
            return req.user.createOrder()
                 .then(order=>{
                     order.addProducts(products.map(product=>{
-                        product.orderItem = { quantity: product.cartItem.quantity}
+                        product.orderItem = { quantity: product.cartItem.quantity} // orderitem quntitiy setting up
                         return product;
                     }))
                 })
                 .catch(err=> console.log(err)); 
 
+        })
+        .then(result=>{
+            return fetchedCart.setProducts(null); //clean the cart
+            
         })
         .then(result=>{
             res.redirect('/orders')
@@ -197,8 +196,14 @@ exports.postOrder = (req,res,next)=>{
 }
 
 exports.getOrders = (req,res,next)=>{
-    res.render('shop/orders',{
-        path: '/orders',
-        pageTitle: 'Your Orders'
-    });
+    req.user.getOrders({include: ['products']}) // specifiedly get products with orders/load related products with orders
+        .then(orders=>{
+            res.render('shop/orders',{
+                path: '/orders',
+                pageTitle: 'Your Orders',
+                orders: orders
+            });
+        })
+        .catch(err=>console.log(err))
+    
 };
