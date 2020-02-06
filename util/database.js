@@ -1,18 +1,27 @@
-// const mysql = require('mysql2');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-// const pool = mysql.createPool({
-//     host: 'localhost',
-//     user: 'root',
-//     database: 'node-complete'
-// });
+let _db;
 
-// module.exports = pool.promise();
+const mongoConnect = (callbak) => {
 
-const Sequelize = require('sequelize');
+    MongoClient.connect('mongodb://savindu:yzQHPrSRuimRVRW6@cluster0-shard-00-00-r106v.mongodb.net:27017,cluster0-shard-00-01-r106v.mongodb.net:27017,cluster0-shard-00-02-r106v.mongodb.net:27017/shop?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority')
+        .then(client => {
+            console.log('CONNECTED!');
+            _db = client.db();
+            callbak();
+        })
+        .catch(err => {
+            console.log(err)
+            throw err;
+        });
+}
 
-const sequelize = new Sequelize('node-complete','root','',{
-    dialect: 'mysql', 
-    host: 'localhost'
-});
-
-module.exports = sequelize;
+const getDb =()=>{
+    if(_db){
+        return _db;
+    }
+    throw 'No database found!'
+}
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
