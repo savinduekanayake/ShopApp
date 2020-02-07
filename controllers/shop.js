@@ -21,16 +21,6 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
     const prodId = req.params.productId;
 
-    // Product.findAll({where:{id:prodId}})
-    //     .then(products=>{
-    //         res.render('shop/product-detail',{
-    //             product:products[0],
-    //             pageTitle: products[0].title,
-    //             path: '/products'
-    //         });
-    //     })
-    //     .catch(err => console.log(err));
-
     Product.findById(prodId)  //findById is replaced in version to findByPk
         .then(product => {
             //console.log(product)
@@ -72,7 +62,7 @@ exports.getCart = (req, res, next) => {
         .catch(err => console.log(err));
 };
 
-//============================================================================
+
 exports.postCart = (req, res, next) => {
     const prodId = req.body.productId;
     Product.findById(prodId)
@@ -101,35 +91,16 @@ exports.postCartDelete = (req, res, next) => {
 
 exports.postOrder = (req, res, next) => {
     let fetchedCart;
-    req.user.getCart()
-        .then(cart => {
-            fetchedCart = cart;
-            return cart.getProducts();
-        })
-        .then(products => {
-            // console.log(products)
-            return req.user.createOrder()
-                .then(order => {
-                    order.addProducts(products.map(product => {
-                        product.orderItem = { quantity: product.cartItem.quantity } // orderitem quntitiy setting up
-                        return product;
-                    }))
-                })
-                .catch(err => console.log(err));
-
-        })
+    req.user.addOrder()
         .then(result => {
-            return fetchedCart.setProducts(null); //clean the cart
-
-        })
-        .then(result => {
+            console.log('order added')
             res.redirect('/orders')
         })
         .catch(err => console.log(err));
 }
 
 exports.getOrders = (req, res, next) => {
-    req.user.getOrders({ include: ['products'] }) // specifiedly get products with orders/load related products with orders
+    req.user.getOrders() 
         .then(orders => {
             res.render('shop/orders', {
                 path: '/orders',
