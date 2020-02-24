@@ -92,7 +92,10 @@ exports.postDeleteProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     Product.find()
+        // .select('title price -_id')                // which feilds to be select
+        // .populate('userId', 'name')         //populate the certain fields not just the id
         .then(products => {
+            console.log(products)
             res.render('admin/products', {
                 prods: products,
                 pageTitle: 'Admin Products',
