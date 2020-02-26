@@ -4,12 +4,21 @@ const path = require('path');
 const parser = require('parse')
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
 
 const errorController = require('./controllers/error');
 // const mongoConnect = require('./util/database').mongoConnect;
 const User = require('./models/user')
 
+const MONGODB_URL = 'mongodb://savindu:yzQHPrSRuimRVRW6@cluster0-shard-00-00-r106v.mongodb.net:27017,cluster0-shard-00-01-r106v.mongodb.net:27017,cluster0-shard-00-02-r106v.mongodb.net:27017/shop?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&w=majority';
+// const MONGODB_URL = 'mongodb://savindu:yzQHPrSRuimRVRW6@cluster0-shard-00-00-r106v.mongodb.net:27017,cluster0-shard-00-01-r106v.mongodb.net:27017,cluster0-shard-00-02-r106v.mongodb.net:27017/shop?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority';
+
 const app = express();
+const store = new MongoDBStore({
+    uri:MONGODB_URL,
+    collection:'sessios'
+});
 
 
 app.set('view engine', 'ejs')
@@ -22,7 +31,13 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyPaser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')))
-app.use(session({secret: 'my secret', resave: false, saveUninitialized:false})); //sigin the hash(secret)
+app.use(session({
+    secret: 'my secret', 
+    resave: false, 
+    saveUninitialized:false, 
+    store:store
+    })
+); //sigin the hash(secret)
 
 //==============
 app.use((req,res,next)=>{
@@ -51,8 +66,7 @@ app.use('/',errorController.get404);
 // })
 
 mongoose
-    .connect('mongodb://savindu:yzQHPrSRuimRVRW6@cluster0-shard-00-00-r106v.mongodb.net:27017,cluster0-shard-00-01-r106v.mongodb.net:27017,cluster0-shard-00-02-r106v.mongodb.net:27017/shop?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority',
-    {useUnifiedTopology: true,useNewUrlParser: true,})
+    .connect(MONGODB_URL,{useUnifiedTopology: true,useNewUrlParser: true,})
     .then((result)=>{
         User.findOne().then(user=>{
             if(!user){
