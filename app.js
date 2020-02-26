@@ -2,7 +2,8 @@ const express = require('express');
 const bodyPaser = require('body-parser');
 const path = require('path');
 const parser = require('parse')
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const session = require('express-session');
 
 const errorController = require('./controllers/error');
 // const mongoConnect = require('./util/database').mongoConnect;
@@ -21,6 +22,7 @@ const authRoutes = require('./routes/auth');
 
 app.use(bodyPaser.urlencoded({extended:false}));
 app.use(express.static(path.join(__dirname,'public')))
+app.use(session({secret: 'my secret', resave: false, saveUninitialized:false})); //sigin the hash(secret)
 
 //==============
 app.use((req,res,next)=>{
