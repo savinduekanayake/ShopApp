@@ -6,6 +6,9 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
+const flash = require('connect-flash');
+
+
 
 const errorController = require('./controllers/error');
 // const mongoConnect = require('./util/database').mongoConnect;
@@ -19,7 +22,9 @@ const store = new MongoDBStore({
     uri:MONGODB_URL,
     collection:'sessios'
 });
-const csrfProtection = csrf(); //default settings
+
+//default settings for csrdToken
+const csrfProtection = csrf();
 
 app.set('view engine', 'ejs')
 app.set('views','views');
@@ -40,8 +45,11 @@ app.use(session({
 ); //sigin the hash(secret)
 
 app.use(csrfProtection);
+//registor flash
+app.use(flash());
 
-//==============
+
+//session setting to user
 app.use((req,res,next)=>{
     if(!req.session.user){
         return next();
@@ -54,7 +62,8 @@ app.use((req,res,next)=>{
     .catch(err=>console.log(err));
 }); 
 
-app.use((req,res,next)=>{ // this is only for views. no need to hard code in all views
+// this is only for views. no need to hard code in all views
+app.use((req,res,next)=>{ 
     res.locals.isAuthenticated = req.session.isLoggedIn,
     res.locals.csrfToken = req.csrfToken()
     next();
@@ -80,7 +89,6 @@ app.use('/',errorController.get404);
 mongoose
     .connect(MONGODB_URL,{useUnifiedTopology: true,useNewUrlParser: true,})
     .then((result)=>{
-        
         console.log('CONNECTED!');
         app.listen(3000);
     }).catch(err=>{
