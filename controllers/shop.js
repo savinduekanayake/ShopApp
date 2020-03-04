@@ -30,7 +30,9 @@ exports.getProduct = (req, res, next) => {
             res.render('shop/product-detail', {
                 product: product,
                 pageTitle: product.title,
-                path: '/products'
+                path: '/products',
+                isAuthenticated:req.session.isLoggedIn
+
             });
         })
         .catch(err => console.log(err));
