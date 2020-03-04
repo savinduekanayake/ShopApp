@@ -6,7 +6,8 @@ exports.getAddProduct = (req, res, next) => {
             layout: false,
             pageTitle: 'Add Product',
             path: "/admin/add-product",
-            editing: false
+            editing: false,
+            isAuthenticated: req.session.isLoggedIn
         })
 };
 
@@ -100,6 +101,7 @@ exports.getProducts = (req, res, next) => {
                 prods: products,
                 pageTitle: 'Admin Products',
                 path: '/admin/products',
+                isAuthenticated: req.session.isLoggedIn
 
             });
         })
