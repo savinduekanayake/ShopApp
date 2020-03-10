@@ -1,16 +1,18 @@
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+
+const nodemailer = require('nodemailer');  // sending mails
 
 const User = require('../models/user');
 
 
-const nodemailer = require('nodemailer');  // sending mails
 const sendgridTransport = require('nodemailer-sendgrid-transport');
-const bcrypt = require('bcryptjs');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
-        api_key: "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"
-        // api_key:"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"
+        // api_key:'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'
+        // api_key: "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"
+        api_key:"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"
     }
 }));
 
@@ -109,7 +111,7 @@ exports.postSignup = (req, res, next) => {
                         from: 'Shop@node.com',
                         subject: 'Signup succeded!',
                         html: '<h1>You successfully signup</h1>'
-                    })
+                    });
                 }
                 ).catch(err=> console.log(err))
         })
@@ -198,7 +200,7 @@ exports.getNewPassword = (req,res,next)=>{
                 pageTitle: 'New Password',
                 // isAuthenticated: false
                 errorMessage:message,
-                userId:user._id.toString(),
+                userId:user._id,
                 passwordToken: token
             });
         })
@@ -208,18 +210,19 @@ exports.getNewPassword = (req,res,next)=>{
 }
 
 exports.postNewPassword = (req,res,next)=>{
-    const newPassword = req.body.password;
+    
     const userId = req.body.userId;
     const passwordToken = req.body.passwordToken;
     let resetUser;
 
     User.findOne({resetToken:passwordToken, resetTokenExpiration: {$gt: Date.now()},_id:userId})
         .then(user=>{
-            return bcrypt.hash(newPassword,12)
+            resetUser=user;
+            return bcrypt.hash(req.body.password,12)
         })
         .then(hashedPassword=>{
             resetUser.password = hashedPassword,
-            resetToken= null;
+            resetUser.resetToken= null;
             resetUser.resetTokenExpiration = undefined;
             return resetUser.save();
         }).then(result=>{
