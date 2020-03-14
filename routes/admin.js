@@ -21,7 +21,7 @@ router.post('/add-product',
     [
         body('title')
             .isLength({min:3})
-            .isAlphanumeric()
+            .isString()
             .trim(),
 
         body('imageUrl')
