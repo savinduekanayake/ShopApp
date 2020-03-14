@@ -4,6 +4,7 @@ const path = require('path');
 const rootDir = require('../util/path');
 
 const adminController = require('../controllers/admin');
+const { check, body } = require('express-validator/check');
 
 const router = express.Router();
 
@@ -16,9 +17,53 @@ router.get('/add-product',isAuth,adminController.getAddProduct);
 router.get('/products',isAuth,adminController.getProducts);
 
 //   /admin/add-product =>POST
-router.post('/add-product',isAuth,adminController.postAddProduct);
+router.post('/add-product',
+    [
+        body('title')
+            .isLength({min:3})
+            .isAlphanumeric()
+            .trim(),
 
-router.get('/edit-product/:productId',isAuth,adminController.getEditProduct);
+        body('imageUrl')
+            .isLength({min:3})
+            .isAlphanumeric()
+            .trim()
+            .isURL(),
+
+        body('price')
+            .isFloat(),
+
+        body('description')
+            .isLength({min:3, max: 200})
+            .trim()
+    ],
+    isAuth,
+    adminController.postAddProduct
+);
+
+router.get('/edit-product/:productId',
+    [
+        body('title')
+            .isLength({min:3})
+            .isString()
+            .trim(),
+
+        body('imageUrl')
+            .isLength({min:3})
+            .isAlphanumeric()
+            .trim()
+            .isURL(),
+
+        body('price')
+            .isFloat(),
+
+        body('description')
+            .isLength({min:3, max: 200})
+            .trim()
+    ],    
+    isAuth,
+    adminController.getEditProduct
+);
 
 //  /admin/edit-product =>POST
 router.post('/edit-product',isAuth,adminController.postEditProduct);

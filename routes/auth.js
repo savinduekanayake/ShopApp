@@ -7,11 +7,25 @@ const router = express.Router();
 
 const User = require('../models/user')
 
+router.get('/signup',authController.getSignup);
+
 router.get('/login',authController.getLogin);
 
-router.post('/login',authController.postLogin);
+router.post(
+    '/login',
+    [
+        body('email')
+            .isEmail()
+            .withMessage('please enter valid email address')
+            .normalizeEmail(),
+        body('password', 'Password has to be valid.')
+            .isLength({min:5})
+            .isAlphanumeric()
+            .trim()
+    ],   
+    authController.postLogin);
 
-router.get('/signup',authController.getSignup);
+
 
 router.post(
     '/signup',
@@ -27,14 +41,17 @@ router.post(
                         );
                     }
                 });
-            }),
+            })
+            .normalizeEmail(),
         body('password',    // check password value in body./we can use check also. 
              'Please enter a password with only numbers and text and at least 5 characters'  //error inteted of .withMessage()
             )    
              .isLength({min:5})
+             .trim()
              .isAlphanumeric(),
 
         body('confirmPassword')
+            .trim()
             .custom((value,{ req }) =>{     //customize the validation with our own
                 if(value !== req.body.password){
                     throw new Error('Passwords have to match!');
@@ -44,7 +61,7 @@ router.post(
             }),
 
     ],
-        authController.postSignup);
+    authController.postSignup);
 
 router.post('/logout',authController.postLogout);
 
