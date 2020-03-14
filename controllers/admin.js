@@ -103,6 +103,7 @@ exports.postEditProduct = (req, res, next) => {
     const errors = validationResult(req);
 
     if(!errors.isEmpty()){
+        //meke mokakhari aulak thiyeno============
         console.log(errors)
         return res.status(422).render('admin/edit-product',
                 {
