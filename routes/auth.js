@@ -5,6 +5,8 @@ const authController = require('../controllers/auth');
 
 const router = express.Router();
 
+const User = require('../models/user')
+
 router.get('/login',authController.getLogin);
 
 router.post('/login',authController.postLogin);
@@ -18,17 +20,29 @@ router.post(
             .isEmail()
             .withMessage('Please enter a valid email.') // change the message
             .custom((value,{ req }) =>{     //customize the validation with our own
-                if(value === 'test@test.com'){
-                    throw new Error('This email address is forbidden');
-                    
-                }
-                return true;
+                return User.findOne({ email: value }).then(userDoc => {
+                    if (userDoc) {
+                        return Promise.reject(
+                        'E-mail exist already, Please pick a different one.'
+                        );
+                    }
+                });
             }),
         body('password',    // check password value in body./we can use check also. 
              'Please enter a password with only numbers and text and at least 5 characters'  //error inteted of .withMessage()
             )    
              .isLength({min:5})
-             .isAlphanumeric()   
+             .isAlphanumeric(),
+
+        body('confirmPassword')
+            .custom((value,{ req }) =>{     //customize the validation with our own
+                if(value !== req.body.password){
+                    throw new Error('Passwords have to match!');
+                    
+                }
+                return true;
+            }),
+
     ],
         authController.postSignup);
 
