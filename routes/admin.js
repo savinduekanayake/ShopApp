@@ -44,12 +44,6 @@ router.get('/edit-product/:productId',
             .isString()
             .trim(),
 
-        body('imageUrl')
-            .isLength({min:3})
-            .isAlphanumeric()
-            .trim()
-            .isURL(),
-
         body('price')
             .isFloat(),
 

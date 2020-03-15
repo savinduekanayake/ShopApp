@@ -24,9 +24,30 @@ exports.postAddProduct = (req, res, next) => {
     const title = req.body.title;
     const price = req.body.price;
     const description = req.body.description;
-    const imageUrl = req.file;
+    const image = req.file;
+    if(!image){
+        return res.status(422).render('admin/edit-product',
+                {
+                    pageTitle: 'Add Product',
+                    path: "/admin/edit-product",
+                    editing: false,
+                    product: {
+                        title:title,
+                        price:price,
+                        description:description
+                    },
+                    hasError:true,
+                    errorMessage: "Attached file is not an image.",
+                    validationErrors: []
+
+
+                }
+            );
+    }
+
+    const imageUrl = image.path;
+
     const errors = validationResult(req);
-    console.log(imageUrl)
 
     if(!errors.isEmpty()){
         console.log(errors)
@@ -123,7 +144,7 @@ exports.postEditProduct = (req, res, next) => {
     const prodId = req.body.productId;
     const updatedTitle = req.body.title;
     const updatedPrice = req.body.price;
-    const updatedImageUrl = req.body.imageUrl;
+    const image = req.file;
     const updatedDescription = req.body.description;
 
     const errors = validationResult(req);
@@ -138,7 +159,6 @@ exports.postEditProduct = (req, res, next) => {
                     editing: true,
                     product: {
                         title:updatedTitle,
-                        imageUrl:updatedImageUrl,
                         price:updatedPrice,
                         description:updatedDescription,
                         _id:prodId
@@ -157,10 +177,12 @@ exports.postEditProduct = (req, res, next) => {
             if(product.userId.toString() !== req.user._id.toString()){
                 return res.redirect('/')
             }
-            product.title=updatedTitle,
-            product.price=updatedPrice,
-            product.updatedImageUrl=updatedImageUrl,
-            product.description=updatedDescription
+            product.title=updatedTitle;
+            product.price=updatedPrice;
+            if(image){
+                product.imageUrl=image.path;
+            }
+            product.description=updatedDescription;
             return product.save()
                 .then(result => {
                     console.log('UPDATED PRODUCT!');
