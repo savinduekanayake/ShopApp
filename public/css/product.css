@@ -162,7 +162,8 @@ button:active{
 }
 
 .pagination a:hover
-.pagination a:active{
+.pagination a:active
+.pagination a.active{
     background: blue;
     color: white;
 }
