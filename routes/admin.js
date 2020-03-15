@@ -24,11 +24,7 @@ router.post('/add-product',
             .isString()
             .trim(),
 
-        body('imageUrl')
-            .isLength({min:3})
-            .isAlphanumeric()
-            .trim()
-            .isURL(),
+        //image
 
         body('price')
             .isFloat(),

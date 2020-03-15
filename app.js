@@ -7,6 +7,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
+const multer = require('multer');
 
 
 
@@ -26,6 +27,16 @@ const store = new MongoDBStore({
 //default settings for csrdToken
 const csrfProtection = csrf();
 
+//make image storing path
+const fileStorage = multer.diskStorage({
+    destination:(req,file,cb)=> {
+        cb(null, 'images')
+    },
+    __filename:(req, file , cb)=>{
+        cb(null, new Date().toISOString()+'-'+file.originalname)
+    }
+});
+
 app.set('view engine', 'ejs')
 app.set('views','views');
 
@@ -35,6 +46,7 @@ const authRoutes = require('./routes/auth');
 
 
 app.use(bodyPaser.urlencoded({extended:false}));
+app.use(multer({storage: fileStorage }).single('image')) // for images upload. 
 app.use(express.static(path.join(__dirname,'public')))
 app.use(session({
     secret: 'my secret', 

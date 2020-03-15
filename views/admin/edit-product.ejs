@@ -14,7 +14,7 @@
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
-        <form class="product-form" action="/admin/<% if(editing || hasError) { %>edit-product<% } else { %>Add-product<% } %>" method="POST">
+        <form class="product-form" action="/admin/<% if(editing || hasError) { %>edit-product<% } else { %>Add-product<% } %>" method="POST" enctype="multipart/form-data">
             <div class="form-control">
                 <label for="title">Title</label>
                 <input 
