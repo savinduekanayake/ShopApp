@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PDFDocument = require('pdfkit');
+const stripe = require('stripe')('pk_test_MywVhIbjmYhVCeevqnRSZkjx00yMlTsSS7');
+
 
 const ITEMS_PER_PAGE = 2;
 
@@ -162,10 +164,20 @@ exports.postCartDelete = (req, res, next) => {
 
 
 exports.postOrder = (req, res, next) => {
-    req.user
+      // Token is created using Checkout or Elements!
+  // Get the payment token ID submitted by the form:
+  const token = req.body.stripeToken; // Using Express
+  let totalSum = 0;
+
+  
+  req.user
         .populate('cart.items.productId')
         .execPopulate()  // to get promize from populate
         .then(user => {
+            user.cart.items.forEach(p=>{
+                totalSum += p.quantity * p.productId.price;
+            });
+            
             console.log(user.cart.items)
             const products = user.cart.items.map(i => {
                 return { quantity: i.quantity, product: { ...i.productId._doc } }
@@ -180,6 +192,15 @@ exports.postOrder = (req, res, next) => {
             });
             order.save();
         }).then(result => {
+
+            const charge = stripe.charges.create({
+                amount: totalSum * 100,
+                currency: 'usd',
+                description: 'Demo Order',
+                source: token,
+                metadata: { order_id: result._id.toString() }
+              });
+
             console.log('order added')
             return req.user.clearCart();
 
@@ -269,4 +290,32 @@ exports.getInvoice = (req, res, next) => {
         })
         .catch(err => next(err))
 
+}
+
+exports.getCheckout = (req,res,next)=>{
+    req.user
+        .populate('cart.items.productId')
+        .execPopulate()  // to get promize from populate
+        .then(user => {
+            // console.log('hi123')
+            const products = user.cart.items;
+            let total = 0;
+            products.forEach(p=>{
+                // console.log(total)
+                total += p.quantity*p.productId.price
+            })
+            console.log(total)
+            
+            res.render('shop/checkout', {
+                path: '/checkout',
+                pageTitle: 'Checkout',
+                products: products,
+                totalSum: total
+            });
+        })
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
+        });
 }

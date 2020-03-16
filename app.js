@@ -10,6 +10,8 @@ const flash = require('connect-flash');
 const multer = require('multer');
 
 
+const shopController = require('./controllers/shop')
+const isAuth = require('./middleware/is-auth'); 
 
 const errorController = require('./controllers/error');
 // const mongoConnect = require('./util/database').mongoConnect;
@@ -68,14 +70,14 @@ app.use(session({
     })
 ); //sigin the hash(secret)
 
-app.use(csrfProtection);
+
 //registor flash
 app.use(flash());
 
 // this is only for views. no need to hard code in all views
 app.use((req,res,next)=>{ 
     res.locals.isAuthenticated = req.session.isLoggedIn,
-    res.locals.csrfToken = req.csrfToken()
+
     next();
 
 })
@@ -101,7 +103,16 @@ app.use((req,res,next)=>{
 }); 
 
 
+app.post('/create-order',isAuth,shopController.postOrder);
 
+//csrf protection
+app.use(csrfProtection);
+// this is only for views. no need to hard code in all views
+app.use((req,res,next)=>{ 
+    res.locals.csrfToken = req.csrfToken()
+    next();
+
+})
 
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
