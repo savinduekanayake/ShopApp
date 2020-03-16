@@ -55,6 +55,9 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
+//testing json
+const feedRoutes = require('./routes/feed');
+
 
 app.use(bodyPaser.urlencoded({extended:false}));
 app.use(multer({storage: fileStorage, fileFilter: FileFilter }).single('image')) // for images upload. 
@@ -113,6 +116,8 @@ app.use((req,res,next)=>{
     next();
 
 })
+//testinng
+app.use('/feed',feedRoutes);
 
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
