@@ -56,11 +56,14 @@ const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
 
 //testing json
-const feedRoutes = require('./routes/feed');
+// const feedRoutes = require('./routes/feed');
 
 
-app.use(bodyPaser.urlencoded({extended:false}));
+app.use(bodyPaser.urlencoded({extended:false})); // x-www-form-urlencoded <form>================================== JSON testing iwara unama ain karanna
 app.use(multer({storage: fileStorage, fileFilter: FileFilter }).single('image')) // for images upload. 
+
+//testing json
+// app.use(bodyPaser.json()) // application/json
 
 app.use(express.static(path.join(__dirname,'public')));
 app.use('/images',express.static(path.join(__dirname,'images')))
@@ -117,7 +120,7 @@ app.use((req,res,next)=>{
 
 })
 //testinng
-app.use('/feed',feedRoutes);
+// app.use('/feed',feedRoutes);
 
 app.use('/admin',adminRoutes);
 app.use(shopRoutes);
